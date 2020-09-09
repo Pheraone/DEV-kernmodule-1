@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cell : MonoBehaviour, ICell
+public interface ICell
 {
-    public Coordinate _coordinate { get; set; }
-    public string _name { get; set; }
+    void SetInteraction();
+}
 
-    // Start is called before the first frame update
-    void Start()
+public class Cell : ICell
+{
+    public Coordinate _cellCoordinate;
+
+    public Cell(Coordinate coordinate)
     {
-        
+        _cellCoordinate = coordinate;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetInteraction()
     {
-        
+
     }
 }

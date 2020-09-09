@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGeneration : MonoBehaviour
+public class LevelGeneration
 {
-    [SerializeField] private int _minLength, _maxLength;
-    private int _length;
-    [SerializeField] private int _minHeight, _maxHeight;
-    private int _height;
-
-    private Coordinate _size;
-    private ICell[,] _grid;
+    [SerializeField] private Coordinate _size;
+    private Cell[,] _grid;
 
     [SerializeField] private Cell _cellPrefab;
 
@@ -18,12 +13,12 @@ public class LevelGeneration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //save the length and height of the dungeon as one "Coordinate"
-        _length = Random.Range(_minLength, _maxLength);
-        _height = Random.Range(_minHeight, _maxHeight);
-        _size = new Coordinate(_length, _height);
+        if (_size == new Coordinate(0, 0))
+        {
+            _size = new Coordinate(5, 5);
+        }
 
-        _grid = new ICell[_size.x, _size.y];
+        _grid = new Cell[_size.x, _size.y];
         GenerateGrid();
     }
 
@@ -35,7 +30,7 @@ public class LevelGeneration : MonoBehaviour
 
     private void GenerateGrid()
     {
-
+        //ToDo fill grid with cells
     }
 
     private void GenerateLevel()
@@ -68,15 +63,12 @@ public class LevelGeneration : MonoBehaviour
     /// instantiates a cell and places it at the given coordinates
     /// </summary>
     /// <param name="coordinate"></param>
-    private ICell CreateCell(Coordinate coordinate)
+    private Cell CreateCell(Coordinate coordinate)
     {
         //instantiate cell
-        ICell newCell = Instantiate(_cellPrefab, transform) as ICell;
+        Cell newCell = new Cell(coordinate);
         _grid[coordinate.x, coordinate.y] = newCell;
-        newCell._name = "Cell " + coordinate.x + ", " + coordinate.y;
-        newCell._coordinate = coordinate;
         //newCell.transform.position = new Vector3(coordinate.x * 1.6f - _size.x * 0.7f + 0.2f, coordinate.y * 1.6f - _size.y * 0.7f + 0.2f, 0f);
-
         return newCell;
     }
 }
