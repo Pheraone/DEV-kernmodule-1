@@ -39,17 +39,6 @@ public class LevelGeneration
     }
 
     /// <summary>
-    /// generate a random coordinate within the size of the grid
-    /// </summary>
-    private Coordinate RandomStartCoordinate
-    {
-        get
-        {
-            return new Coordinate(Random.Range(0, _size.x), Random.Range(0, _size.y));
-        }
-    }
-
-    /// <summary>
     /// see if given coordinates are within the set size for the grid
     /// </summary>
     /// <param name="coordinate"></param>
