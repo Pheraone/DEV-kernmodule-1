@@ -7,11 +7,11 @@ public interface ICell
     void SetInteraction();
 }
 
-public class Cell : ICell
+public class GameObject : ICell
 {
     public Coordinate _cellCoordinate;
 
-    public Cell(Coordinate coordinate)
+    public GameObject(Coordinate coordinate)
     {
         _cellCoordinate = coordinate;
     }

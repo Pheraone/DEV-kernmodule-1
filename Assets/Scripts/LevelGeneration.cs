@@ -5,9 +5,9 @@ using UnityEngine;
 public class LevelGeneration
 {
     [SerializeField] private Coordinate _size;
-    private Cell[,] _grid;
+    private GameObject[,] _grid;
 
-    [SerializeField] private Cell _cellPrefab;
+    [SerializeField] private GameObject _cellPrefab;
 
 
     // ToDo call from GameManager upon start
@@ -18,7 +18,7 @@ public class LevelGeneration
             _size = new Coordinate(5, 5);
         }
 
-        _grid = new Cell[_size.x, _size.y];
+        _grid = new GameObject[_size.x, _size.y];
         GenerateGrid();
         GenerateLevel();
     }
@@ -47,10 +47,10 @@ public class LevelGeneration
     /// instantiates a cell and places it at the given coordinates
     /// </summary>
     /// <param name="coordinate"></param>
-    private Cell CreateCell(Coordinate coordinate)
+    private GameObject CreateCell(Coordinate coordinate)
     {
         //instantiate cell
-        Cell newCell = new Cell(coordinate);
+        GameObject newCell = new GameObject(coordinate);
         _grid[coordinate.x, coordinate.y] = newCell;
         //newCell.transform.position = new Vector3(coordinate.x * 1.6f - _size.x * 0.7f + 0.2f, coordinate.y * 1.6f - _size.y * 0.7f + 0.2f, 0f);
         return newCell;
