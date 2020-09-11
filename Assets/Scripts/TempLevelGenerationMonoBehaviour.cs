@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGeneration
+public class TempLevelGenerationMonoBehaviour : MonoBehaviour
 {
     [SerializeField] private Coordinate _size;
     private Cell[,] _grid;
@@ -10,8 +10,7 @@ public class LevelGeneration
     [SerializeField] private Cell _cellPrefab;
 
 
-    // ToDo call from GameManager upon start
-    void StartFunction()
+    void Start()
     {
         if (_size == new Coordinate(0, 0))
         {
@@ -25,12 +24,19 @@ public class LevelGeneration
     
     private void GenerateGrid()
     {
-        //ToDo fill grid with cells
+        for (int x = 0; x < _size.x; x++)
+        {
+            for (int y = 0; y < _size.y; y++)
+            {
+                Coordinate thisCoordinate = new Coordinate(x, y);
+                CreateCell(thisCoordinate);
+            }
+        }
     }
 
     private void GenerateLevel()
     {
-        //ToDo generate level with difficulty scaled with score
+        //ToDo generate level
     }
 
     /// <summary>
