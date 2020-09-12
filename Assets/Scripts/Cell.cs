@@ -2,22 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICell
-{
-    void SetInteraction();
-}
-
 public class Cell : ICell
 {
-    public Coordinate _cellCoordinate;
+    public Coordinate Position { get; set; }
+    public int Cost { get; set; }
 
-    public Cell(Coordinate coordinate)
+    public Cell(Coordinate coordinate, int cost)
     {
-        _cellCoordinate = coordinate;
-    }
-
-    public void SetInteraction()
-    {
-
+        Position = coordinate;
+        Cost = cost;
     }
 }

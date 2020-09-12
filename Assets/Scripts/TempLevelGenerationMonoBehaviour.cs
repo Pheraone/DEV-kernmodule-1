@@ -2,36 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGeneration
+public class TempLevelGenerationMonoBehaviour : MonoBehaviour
 {
     [SerializeField] private Coordinate _size;
-    private ICell[,] _grid;
+    private GameObject[,] _grid;
 
     [SerializeField] private GameObject _cellPrefab;
 
-
-    // ToDo call from GameManager upon start
-    void StartFunction()
+    void Start()
     {
         if (_size == new Coordinate(0, 0))
         {
-            _size = new Coordinate(31, 17);
+            _size = new Coordinate(5, 5);
         }
-
-        _grid = new ICell[_size.x, _size.y];
+        _grid = new GameObject[_size.x, _size.y];
+        GenerateGrid();
         GenerateLevel();
     }
-
-    private void GenerateLevel()
+    
+    private void GenerateGrid()
     {
         for (int x = 0; x < _size.x; x++)
         {
             for (int y = 0; y < _size.y; y++)
             {
-                _grid[x, y] = new Cell(new Coordinate(x, y), 1) as ICell;
+                Coordinate thisCoordinate = new Coordinate(x, y);
                 //CreateCell(thisCoordinate);
             }
         }
+    }
+
+    private void GenerateLevel()
+    {
+        //ToDo generate level
     }
 
     /// <summary>
