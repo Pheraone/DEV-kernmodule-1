@@ -7,11 +7,7 @@ public class LevelGeneration
     [SerializeField] private Coordinate _size;
     private ICell[,] _grid;
 
-    [SerializeField] private GameObject _cellPrefab;
-
-
-    // ToDo call from GameManager upon start
-    void StartFunction()
+    public LevelGeneration()
     {
         if (_size == new Coordinate(0, 0))
         {
@@ -24,13 +20,24 @@ public class LevelGeneration
 
     private void GenerateLevel()
     {
+        //ToDo use object pool fopr cells
         for (int x = 0; x < _size.x; x++)
         {
             for (int y = 0; y < _size.y; y++)
             {
-                _grid[x, y] = new Cell(new Coordinate(x, y), 1) as ICell;
-                //CreateCell(thisCoordinate);
+                _grid[x, y] = new Cell(new Coordinate(x, y), (int)Random.Range(0, 1.999f)) as ICell;
             }
+        }
+    }
+
+    /// <summary>
+    /// generate a random coordinate within the size of the dungeon, leaving the borders free
+    /// </summary>
+    public Coordinate RandomStartCoordinate
+    {
+        get
+        {
+            return new Coordinate(Random.Range(1, _size.x - 1), Random.Range(1, _size.y - 1));
         }
     }
 
@@ -43,18 +50,4 @@ public class LevelGeneration
     {
         return coordinate.x >= 0 && coordinate.x < _size.x && coordinate.y >= 0 && coordinate.y < _size.y;
     }
-
-    /*
-    /// <summary>
-    /// instantiates a cell and places it at the given coordinates
-    /// </summary>
-    /// <param name="coordinate"></param>
-    private GameObject CreateCell(Coordinate coordinate)
-    {
-        //instantiate cell
-        GameObject newCell = new GameObject(coordinate);
-        _grid[coordinate.x, coordinate.y] = newCell;
-        //newCell.transform.position = new Vector3(coordinate.x * 1.6f - _size.x * 0.7f + 0.2f, coordinate.y * 1.6f - _size.y * 0.7f + 0.2f, 0f);
-        return newCell;
-    }*/
 }
