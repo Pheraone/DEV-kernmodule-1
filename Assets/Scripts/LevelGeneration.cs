@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelGeneration
 {
     [SerializeField] private Coordinate _size;
-    private GameObject[,] _grid;
+    private ICell[,] _grid;
 
     [SerializeField] private GameObject _cellPrefab;
 
@@ -15,22 +15,23 @@ public class LevelGeneration
     {
         if (_size == new Coordinate(0, 0))
         {
-            _size = new Coordinate(5, 5);
+            _size = new Coordinate(31, 17);
         }
 
-        _grid = new GameObject[_size.x, _size.y];
-        GenerateGrid();
+        _grid = new ICell[_size.x, _size.y];
         GenerateLevel();
-    }
-    
-    private void GenerateGrid()
-    {
-        //ToDo fill grid with cells
     }
 
     private void GenerateLevel()
     {
-        //ToDo generate level with difficulty scaled with score
+        for (int x = 0; x < _size.x; x++)
+        {
+            for (int y = 0; y < _size.y; y++)
+            {
+                _grid[x, y] = new Cell(new Coordinate(x, y), 1) as ICell;
+                //CreateCell(thisCoordinate);
+            }
+        }
     }
 
     /// <summary>
@@ -43,6 +44,7 @@ public class LevelGeneration
         return coordinate.x >= 0 && coordinate.x < _size.x && coordinate.y >= 0 && coordinate.y < _size.y;
     }
 
+    /*
     /// <summary>
     /// instantiates a cell and places it at the given coordinates
     /// </summary>
@@ -54,5 +56,5 @@ public class LevelGeneration
         _grid[coordinate.x, coordinate.y] = newCell;
         //newCell.transform.position = new Vector3(coordinate.x * 1.6f - _size.x * 0.7f + 0.2f, coordinate.y * 1.6f - _size.y * 0.7f + 0.2f, 0f);
         return newCell;
-    }
+    }*/
 }

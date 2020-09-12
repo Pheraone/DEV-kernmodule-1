@@ -15,7 +15,6 @@ public class TempLevelGenerationMonoBehaviour : MonoBehaviour
         {
             _size = new Coordinate(5, 5);
         }
-
         _grid = new GameObject[_size.x, _size.y];
         GenerateGrid();
         GenerateLevel();
@@ -28,7 +27,7 @@ public class TempLevelGenerationMonoBehaviour : MonoBehaviour
             for (int y = 0; y < _size.y; y++)
             {
                 Coordinate thisCoordinate = new Coordinate(x, y);
-                CreateCell(thisCoordinate);
+                //CreateCell(thisCoordinate);
             }
         }
     }
@@ -48,6 +47,7 @@ public class TempLevelGenerationMonoBehaviour : MonoBehaviour
         return coordinate.x >= 0 && coordinate.x < _size.x && coordinate.y >= 0 && coordinate.y < _size.y;
     }
 
+    /*
     /// <summary>
     /// instantiates a cell and places it at the given coordinates
     /// </summary>
@@ -59,5 +59,5 @@ public class TempLevelGenerationMonoBehaviour : MonoBehaviour
         _grid[coordinate.x, coordinate.y] = newCell;
         //newCell.transform.position = new Vector3(coordinate.x * 1.6f - _size.x * 0.7f + 0.2f, coordinate.y * 1.6f - _size.y * 0.7f + 0.2f, 0f);
         return newCell;
-    }
+    }*/
 }
