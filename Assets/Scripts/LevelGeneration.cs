@@ -45,6 +45,8 @@ public class LevelGeneration : ILevelGenerator
         int numberOfLoops = 5;
         bool finishedLoop = false;
 
+        int loopTimer = 0;
+
         //make little room in the middle
         for (int x = 0; x < 3; x++)
         {
@@ -66,9 +68,13 @@ public class LevelGeneration : ILevelGenerator
                 {
                     do
                     {
+                        loopTimer++;
                         nextDirection = Direction.NotSoRandomDirection(previousDirection);
+                        if (loopTimer > 10) break;
                     }
                     while (_grid[thisCoordinate.x + nextDirection.x, thisCoordinate.y + nextDirection.y].Cost == 0);
+                    loopTimer = 0;
+                    thisCoordinate += nextDirection;
 
                     loopStartDirection = nextDirection;
                 }
@@ -83,15 +89,15 @@ public class LevelGeneration : ILevelGenerator
                         _path.Add(thisCoordinate);
 
                         thisCoordinate += nextDirection;
-                        if (!ContainsCoordinates(thisCoordinate)) continue;
+                        if (!ContainsCoordinates(thisCoordinate)) break;
                     }
                     else
                     {
                         finishedLoop = true;
-                        continue;
+                        break;
                     }
                 }
-                if (finishedLoop) continue;
+                if (finishedLoop) break;
 
                 if (x==2)
                 {
@@ -107,9 +113,12 @@ public class LevelGeneration : ILevelGenerator
 
             do
             {
+                loopTimer++;
                 nextDirection = Direction.NotSoRandomDirection(previousDirection);
+                if (loopTimer > 10) break;
             }
             while (_grid[thisCoordinate.x + nextDirection.x, thisCoordinate.y + nextDirection.y].Cost == 0);
+            loopTimer = 0;
 
             thisCoordinate += nextDirection;
             previousDirection = nextDirection;
@@ -129,6 +138,7 @@ public class LevelGeneration : ILevelGenerator
         Coordinate previousDirection = new Coordinate(0,0);
         bool tryAgain = false;
         int loopOrigin = 0;
+        int looptimer = 0;
 
         //while there are less than x loops
         do
@@ -185,7 +195,7 @@ public class LevelGeneration : ILevelGenerator
                 }
                 if (numberOfLoops > 4)
                 {
-                    continue;
+                    break;
                 }
                 nextDirection = Direction.RandomDirection(previousDirection);
                 thisCoordinate += nextDirection;
@@ -195,9 +205,17 @@ public class LevelGeneration : ILevelGenerator
 
             while (!ContainsCoordinates(thisCoordinate))
             {
+                looptimer++;
                 thisCoordinate += previousDirection;
                 nextDirection = Direction.RandomDirection(previousDirection);
                 thisCoordinate += nextDirection;
+                previousDirection = nextDirection * -1;
+
+                if (looptimer>10)
+                {
+                    looptimer = 0;
+                    break;
+                }
             }
         }
         while (numberOfLoops <= 4);
