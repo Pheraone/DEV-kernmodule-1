@@ -18,7 +18,9 @@ public class Cell : ICell
         {
             //set a colour to identify walkable(blue) and non-walkable(black) cells
             if (value > 0) _thisCell.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0.5f);
-            else _thisCell.GetComponent<SpriteRenderer>().color = new Color(0, 0, 1, 0.5f);
+            else 
+            if (value == 0) _thisCell.GetComponent<SpriteRenderer>().color = new Color(0, 0, 1, 0.5f);
+            else _thisCell.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 0.5f);
 
             _cost = value;
         }
