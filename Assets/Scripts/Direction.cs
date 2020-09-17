@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class Direction
 {
-    public static Coordinate[] directionVectors { get; private set; } =
+    public static Coordinate[] DirectionVectors { get; private set; } =
     {
         new Coordinate(0, 1),
         new Coordinate(1, 0),
@@ -23,7 +23,7 @@ public static class Direction
 
         do
         {
-            randomDirection = directionVectors[Random.Range(0, directionVectors.Length)];
+            randomDirection = DirectionVectors[Random.Range(0, DirectionVectors.Length)];
         }
         while (randomDirection == back);
 
@@ -31,31 +31,32 @@ public static class Direction
             return randomDirection;
         }
     }
+
     public static Coordinate NotSoRandomDirection(Coordinate lastDirection)
     {
         Coordinate lessRandomDirection;
 
-        if (lastDirection.x == 0)
+        if (lastDirection._x == 0)
         {
             do
             {
-                lessRandomDirection = directionVectors[Random.Range(0, directionVectors.Length)];
+                lessRandomDirection = DirectionVectors[Random.Range(0, DirectionVectors.Length)];
             }
-            while (lessRandomDirection.x == 0);
+            while (lessRandomDirection._x == 0);
         }
-        else if (lastDirection.y == 0)
+        else if (lastDirection._y == 0)
         {
             do
             {
-                lessRandomDirection = directionVectors[Random.Range(0, directionVectors.Length)];
+                lessRandomDirection = DirectionVectors[Random.Range(0, DirectionVectors.Length)];
             }
-            while (lessRandomDirection.y == 0);
+            while (lessRandomDirection._y == 0);
         }
         else
         {
             do
             {
-                lessRandomDirection = directionVectors[Random.Range(0, directionVectors.Length)];
+                lessRandomDirection = DirectionVectors[Random.Range(0, DirectionVectors.Length)];
             }
             while (lessRandomDirection == lastDirection);
         }

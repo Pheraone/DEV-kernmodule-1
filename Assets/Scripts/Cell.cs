@@ -30,8 +30,8 @@ public class Cell : ICell
     {
         Position = coordinate;
         _thisCell = new GameObject();
-        _thisCell.transform.position = new Vector3(coordinate.x, coordinate.y, -0.1f);
-        _thisCell.name = "Cell " + coordinate.x + ", " + coordinate.y;
+        _thisCell.transform.position = new Vector3(coordinate._x, coordinate._y, 0);
+        _thisCell.name = "Cell " + coordinate._x + ", " + coordinate._y;
         _thisCell.AddComponent<SpriteRenderer>();
         _thisCell.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Cell");
         Cost = cost;
