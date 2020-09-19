@@ -5,18 +5,18 @@ using UnityEngine;
 public class MonoBehaviourForTest : MonoBehaviour
 {
     //For testing with monobehaviour
-    private EnemyFSM enemyStateMachine;
+    private EnemyFSM _enemyStateMachine;
    
     private void Awake()
     {
-        enemyStateMachine = new EnemyFSM();   
+        _enemyStateMachine = new EnemyFSM();   
     }
 
     void Start()
     {
         //add states to the dictionary
-        enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
-        enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
+        _enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
+        _enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
         
     }
 
@@ -26,14 +26,14 @@ public class MonoBehaviourForTest : MonoBehaviour
         //Temporary for FSM state switch test
         if (Input.GetKey(KeyCode.Space))
         {
-            enemyStateMachine.SwitchState(EnemyStateType.Idle);
+            _enemyStateMachine.SwitchState(EnemyStateType.Idle);
         }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            enemyStateMachine.SwitchState(EnemyStateType.Attack);
+            _enemyStateMachine.SwitchState(EnemyStateType.Attack);
         }
       
-       enemyStateMachine.Update();
+       _enemyStateMachine.Update();
     }
 }
