@@ -8,7 +8,7 @@ public class LevelGeneration : ILevelGenerator
     public Coordinate _size { get; set; }
     public ICell[,] _grid { get; private set; }
     Coordinate _thisCoordinate;
-    public List<Coordinate> _path { get; private set; }
+    public List<Coordinate> _path { get; set; }
     List<Coordinate> _thisLoop;
 
     public LevelGeneration(GameObject player)
@@ -333,6 +333,7 @@ public class LevelGeneration : ILevelGenerator
 public interface ILevelGenerator
 {
     Coordinate _size { get; set; }
+    List<Coordinate> _path { get; set; }
     ICell[,] _grid { get; }
     void GenerateLevel();
 }
