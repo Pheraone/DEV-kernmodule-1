@@ -5,38 +5,38 @@ using UnityEngine;
 [System.Serializable]
 public struct Coordinate
 {
-    public int x, y;
+    public int _x, _y;
 
     public Coordinate(int x, int y)
     {
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
 
     public static Coordinate operator +(Coordinate a, Coordinate b)
     {
-        a.x += b.x;
-        a.y += b.y;
+        a._x += b._x;
+        a._y += b._y;
         return a;
     }
 
     public static Coordinate operator -(Coordinate a, Coordinate b)
     {
-        a.x -= b.x;
-        a.y -= b.y;
+        a._x -= b._x;
+        a._y -= b._y;
         return a;
     }
 
     public static Coordinate operator *(Coordinate a, int b)
     {
-        a.x *= b;
-        a.y *= b;
+        a._x *= b;
+        a._y *= b;
         return a;
     }
 
     public static bool operator !=(Coordinate a, Coordinate b)
     {
-        if (a.x == b.x && a.y == b.y)
+        if (a._x == b._x && a._y == b._y)
         {
             return false;
         }
@@ -48,7 +48,7 @@ public struct Coordinate
 
     public static bool operator ==(Coordinate a, Coordinate b)
     {
-        if (a.x == b.x && a.y == b.y)
+        if (a._x == b._x && a._y == b._y)
         {
             return true;
         }
@@ -56,5 +56,35 @@ public struct Coordinate
         {
             return false;
         }
+    }
+
+    public static Coordinate TurnRight(Coordinate a)
+    {
+        if (a._x == 0)
+        {
+            a._x = a._y;
+            a._y = 0;
+        }
+        else
+        {
+            a._y = -a._x;
+            a._x = 0;
+        }
+        return a;
+    }
+
+    public static Coordinate TurnLeft(Coordinate a)
+    {
+        if (a._x == 0)
+        {
+            a._x = -a._y;
+            a._y = 0;
+        }
+        else
+        {
+            a._y = a._x;
+            a._x = 0;
+        }
+        return a;
     }
 }
