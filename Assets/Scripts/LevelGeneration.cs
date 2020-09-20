@@ -7,6 +7,8 @@ public class LevelGeneration : ILevelGenerator
     public Coordinate _size { get; set; }
     public ICell[,] _grid { get; private set; }
     public List<Coordinate> _path { get; private set; }
+    Coordinate _thisCoordinate;
+    List<Coordinate> _thisLoop;
 
     public LevelGeneration()
     {
@@ -17,7 +19,7 @@ public class LevelGeneration : ILevelGenerator
 
         _grid = new ICell[_size._x, _size._y];
         GenerateGrid();
-        NewLevel();
+        GenerateLevel();
     }
 
     private void GenerateGrid()
@@ -32,7 +34,12 @@ public class LevelGeneration : ILevelGenerator
         }
     }
 
-    public void NewLevelSimple()
+    public void GenerateLevel()
+    {
+        NewLevel();
+    }
+
+    private void NewLevelSimple()
     {
         _path = new List<Coordinate>();
         // start from the middle
@@ -130,18 +137,19 @@ public class LevelGeneration : ILevelGenerator
     }
 
 
-    public void NewLevel()
+    private void NewLevel()
     {
         _path = new List<Coordinate>();
-        List<Coordinate> thisLoop = new List<Coordinate>();
+        _thisLoop = new List<Coordinate>();
         
         // start from the middle
-        Coordinate thisCoordinate = new Coordinate(0,0);
+        _thisCoordinate = new Coordinate(0,0);
         Coordinate startCoordinate = new Coordinate(_size._x/2, _size._y/2);
         int numberOfLoops = 0;
         Coordinate nextDirection = new Coordinate(0, 0);
         Coordinate previousDirection = new Coordinate(0,0);
         bool tryAgain = false;
+        bool loopingBack = false;
         int loopOrigin = 0;
         int loopTimer = 0;
 
@@ -150,9 +158,9 @@ public class LevelGeneration : ILevelGenerator
         {
             for (int y = 0; y < 2; y++)
             {
-                thisCoordinate = startCoordinate + new Coordinate(x, y);
-                _grid[thisCoordinate._x, thisCoordinate._y].Cost = 0;
-                _path.Add(thisCoordinate);
+                _thisCoordinate = startCoordinate + new Coordinate(x, y);
+                _grid[_thisCoordinate._x, _thisCoordinate._y].Cost = 0;
+                _path.Add(_thisCoordinate);
             }
         }
 
@@ -167,82 +175,86 @@ public class LevelGeneration : ILevelGenerator
                     nextDirection = Direction.NotSoRandomDirection(previousDirection);
                     if (loopTimer > 10) break;
                 }
-                while (_grid[thisCoordinate._x + nextDirection._x, thisCoordinate._y + nextDirection._y].Cost == 0);
+                while (_grid[_thisCoordinate._x + nextDirection._x, _thisCoordinate._y + nextDirection._y].Cost == 0);
 
                 loopTimer = 0;
-                thisCoordinate += nextDirection;
-
-                //loopStartDirection = nextDirection;
+                _thisCoordinate += nextDirection;
+                previousDirection = nextDirection * -1;
             }
-            //while the coordinates are within the array and there is no cost assigned yet
+            //while the coordinates are within the array 
             do
             {
-                //Todo check for loops going back on themselves too soon
-
-                //change the cost of the cell
-                if (_grid[thisCoordinate._x, thisCoordinate._y].Cost < 0)
+                //change the cost of the cell if there is no cost assigned yet
+                if (_grid[_thisCoordinate._x, _thisCoordinate._y].Cost < 0)
                 {
-                    _grid[thisCoordinate._x, thisCoordinate._y].Cost = 0;
-                    _path.Add(thisCoordinate);
-                    thisLoop.Add(thisCoordinate);
+                    AddCost();
 
-                    thisCoordinate += nextDirection;
+                    _thisCoordinate += nextDirection;
 
                     do
                     {
                         tryAgain = false;
-                        while (!ContainsCoordinates(thisCoordinate))
+                        while (!ContainsCoordinates(_thisCoordinate))
                         {
                             tryAgain = true;
-                            thisCoordinate += previousDirection;
+                            _thisCoordinate += previousDirection;
                             nextDirection = Direction.RandomDirection(previousDirection);
-                            thisCoordinate += nextDirection;
+                            _thisCoordinate += nextDirection;
                         }
 
                         previousDirection = nextDirection * -1;
 
-                        if (_grid[thisCoordinate._x, thisCoordinate._y].Cost < 0)
+                        if (_grid[_thisCoordinate._x, _thisCoordinate._y].Cost < 0)
                         {
-                            _grid[thisCoordinate._x, thisCoordinate._y].Cost = 0;
-                            _path.Add(thisCoordinate);
-                            thisLoop.Add(thisCoordinate);
+                            AddCost();
                         }
                     }
                     while (tryAgain);
                 }
-                //take a random tile on the path and try from there
+                //take a random tile on the path and try from there if the current loop is done/long enough
                 else 
                 {
-                    if (_path[loopOrigin] != thisCoordinate)
+                    if (!_thisLoop.Contains(_thisCoordinate) || _thisLoop.Count >= 16)
                     {
                         numberOfLoops++;
                         loopOrigin = (int)Random.Range(0, _path.Count - 1);
-                        thisCoordinate = _path[loopOrigin];
+                        _thisCoordinate = _path[loopOrigin];
+                        _thisLoop.Clear();
                         previousDirection = new Coordinate(0, 0);
                     }
                     else
                     {
-                        thisCoordinate += previousDirection;
+                        loopingBack = true;
+                        _thisCoordinate += previousDirection;
                     }
                 }
 
                 if (numberOfLoops > 8) break;
-                
-                nextDirection = Direction.RandomDirection(previousDirection);
-                thisCoordinate += nextDirection;
+
+                if (loopingBack)
+                {
+                    nextDirection = Direction.NotSoRandomDirection(previousDirection);
+                    loopingBack = false;
+                }
+                else
+                {
+                    nextDirection = Direction.RandomDirection(previousDirection);
+                }
+
+                _thisCoordinate += nextDirection;
                 previousDirection = nextDirection * -1;
             }
-            while (ContainsCoordinates(thisCoordinate));
+            while (ContainsCoordinates(_thisCoordinate));
 
-            while (!ContainsCoordinates(thisCoordinate))
+            while (!ContainsCoordinates(_thisCoordinate))
             {
                 loopTimer++;
-                thisCoordinate += previousDirection;
-                nextDirection = Direction.RandomDirection(previousDirection);
-                thisCoordinate += nextDirection;
+                _thisCoordinate += previousDirection;
+                nextDirection = Direction.NotSoRandomDirection(previousDirection);
+                _thisCoordinate += nextDirection;
                 previousDirection = nextDirection * -1;
 
-                if (loopTimer>10)
+                if (loopTimer > 10)
                 {
                     loopTimer = 0;
                     break;
@@ -250,6 +262,26 @@ public class LevelGeneration : ILevelGenerator
             }
         }
         while (numberOfLoops <= 8);
+        //ToDo make sure it doesn't freeze
+        //do
+        //{
+        //    AddCost();
+        //    do
+        //    {
+        //        loopTimer++;
+        //        nextDirection = Direction.RandomDirection(previousDirection);
+        //        if (loopTimer > 10)
+        //        {
+        //            loopTimer = 0;
+        //            break;
+        //        }
+        //    }
+        //    while (!ContainsCoordinates(_thisCoordinate + nextDirection));
+        //
+        //    _thisCoordinate += nextDirection;
+        //    previousDirection = nextDirection * -1;
+        //}
+        //while (_grid[_thisCoordinate._x + nextDirection._x, _thisCoordinate._y + nextDirection._y].Cost < 0);
     }
 
     /// <summary>
@@ -261,11 +293,19 @@ public class LevelGeneration : ILevelGenerator
     {
         return coordinate._x >= 1 && coordinate._x < _size._x -1 && coordinate._y >= 1 && coordinate._y < _size._y-1;
     }
+
+    public void AddCost()
+    {
+        _grid[_thisCoordinate._x, _thisCoordinate._y].Cost = 0;
+        _path.Add(_thisCoordinate);
+        _thisLoop.Add(_thisCoordinate);
+    }
+
 }
 
 public interface ILevelGenerator
 {
     Coordinate _size { get; set; }
     ICell[,] _grid { get; }
-    void NewLevel();
+    void GenerateLevel();
 }

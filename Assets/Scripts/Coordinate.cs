@@ -57,4 +57,34 @@ public struct Coordinate
             return false;
         }
     }
+
+    public static Coordinate TurnRight(Coordinate a)
+    {
+        if (a._x == 0)
+        {
+            a._x = a._y;
+            a._y = 0;
+        }
+        else
+        {
+            a._y = a._x;
+            a._x = 0;
+        }
+        return a;
+    }
+
+    public static Coordinate TurnLeft(Coordinate a)
+    {
+        if (a._x == 0)
+        {
+            a._x = -a._y;
+            a._y = 0;
+        }
+        else
+        {
+            a._y = -a._x;
+            a._x = 0;
+        }
+        return a;
+    }
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    LevelGeneration _levelGeneration;
+    ILevelGenerator _levelGeneration;
+
     InputHandler _inputHandler;
     Player _player;
 
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
         playerObject = Instantiate(playerPrefab);
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
-        _levelGeneration = new LevelGeneration();
+        _levelGeneration = new LevelGeneration() as ILevelGenerator;
         _player = new Player();
     }
 
