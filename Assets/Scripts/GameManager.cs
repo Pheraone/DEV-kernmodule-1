@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    LevelGeneration _levelGeneration;
+    ILevelGenerator _levelGeneration;
 
     // Start is called before the first frame update
     void Start()
     {
-        _levelGeneration = new LevelGeneration();
+        _levelGeneration = new LevelGeneration() as ILevelGenerator;
     }
 
     // Update is called once per frame
