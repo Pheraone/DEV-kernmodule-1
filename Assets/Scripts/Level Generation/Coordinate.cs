@@ -67,7 +67,7 @@ public struct Coordinate
         }
         else
         {
-            a._y = a._x;
+            a._y = -a._x;
             a._x = 0;
         }
         return a;
@@ -82,7 +82,7 @@ public struct Coordinate
         }
         else
         {
-            a._y = -a._x;
+            a._y = a._x;
             a._x = 0;
         }
         return a;

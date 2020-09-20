@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
         playerObject = Instantiate(playerPrefab);
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
-        _levelGeneration = new LevelGeneration() as ILevelGenerator;
+        _levelGeneration = new LevelGeneration(playerObject) as ILevelGenerator;
         _player = new Player();
     }
 
