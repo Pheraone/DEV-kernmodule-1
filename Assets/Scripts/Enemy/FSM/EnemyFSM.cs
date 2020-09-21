@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class EnemyFSM
 {
+    public Enemy _owner { get; private set; }
+
+
     IState currentState;
     Dictionary<EnemyStateType, IState> states = new Dictionary<EnemyStateType, IState>();
+
+    public void Initialize(Enemy owner)
+    {
+        _owner = owner;
+    } 
 
     public void Update()
     {
@@ -23,6 +31,4 @@ public class EnemyFSM
     {
         states.Add(_type, _state);
     }
-
-    //TODO: abstract state
 }

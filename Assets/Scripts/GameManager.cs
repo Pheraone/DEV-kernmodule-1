@@ -14,17 +14,19 @@ public class GameManager : MonoBehaviour
     Vector3 newDirection;
 
     private EnemyFSM _enemyStateMachine;
-    //public Pathfinder _pathfinder;
+    public Pathfinder2 _pathfinder;
 
     public GameObject enemyPrefab;
     public GameObject enemyObject;
 
+    public RandomCoordinate _randomCoordinate;
 
     // Start is called before the first frame update
     void Start()
     {
         playerObject = Instantiate(playerPrefab);
         enemyObject = Instantiate(enemyPrefab);
+        
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
         _player = new Player();
@@ -34,11 +36,13 @@ public class GameManager : MonoBehaviour
         _enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
         _enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
 
-       // _pathfinder = new Pathfinder(_levelGeneration._path);
+       
 
 
         _levelGeneration = new LevelGeneration() as ILevelGenerator;
 
+        _randomCoordinate = new RandomCoordinate(_levelGeneration);
+        _pathfinder = new Pathfinder2(_levelGeneration);
     }
 
     // Update is called once per frame
@@ -57,15 +61,14 @@ public class GameManager : MonoBehaviour
         }
 
         //Temporary for FSM state switch test
-        if (Input.GetKey(KeyCode.Space) || Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) > 2 )
+        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) > 0.5 )
         {
             _enemyStateMachine.SwitchState(EnemyStateType.Idle);
-            //FIXME: game object to Vector2
-          //  _pathfinder.FindPath(Vector2.zero, playerObject.transform.position);
+
             Debug.Log(playerObject.transform.position);
         }
 
-        if (Input.GetKeyDown(KeyCode.F) || Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) <= 2)
+        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) <= 0.5)
         {
             _enemyStateMachine.SwitchState(EnemyStateType.Attack);
         }
