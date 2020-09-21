@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface ISpawnable
 {
+    Coordinate Position { get; set; }
     void SpawnTo(Coordinate spawnPoint);
 }

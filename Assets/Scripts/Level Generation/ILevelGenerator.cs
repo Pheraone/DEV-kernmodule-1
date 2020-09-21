@@ -6,5 +6,5 @@ public interface ILevelGenerator
 {
     List<Coordinate> Path { get; set; }
     ICell[,] Grid { get; }
-    void GenerateLevel();
+    int GenerateLevel();
 }

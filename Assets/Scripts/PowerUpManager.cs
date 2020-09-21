@@ -5,29 +5,32 @@ using UnityEngine;
 public class PowerUpManager
 {
     public PowerUpDecorator[] allPowerUps = new PowerUpDecorator[2] { new SpeedDecorator(), new ReverseDecorator() };
-    public List<PowerUpWithTransform> spawnedPowerUp = new List<PowerUpWithTransform>();
-    public void createRandomPowerUp(Transform powerUpObj)
+    //public List<PowerUp> spawnedPowerUp = new List<PowerUpWithTransform>();
+    //public void createRandomPowerUp(Transform powerUpObj)
+    //{
+    //    IPowerUp newPowerUp = new PowerUp();
+    //
+    //    int randomInt = Random.Range(0, allPowerUps.Length);
+    //
+    //    newPowerUp = allPowerUps[randomInt].Decorate(newPowerUp);
+    //    PowerUpWithTransform powerUpFinished = new PowerUpWithTransform() { myPowerUp = newPowerUp, myTransform = powerUpObj, myVector2 = powerUpObj.position };
+    //    spawnedPowerUp.Add(powerUpFinished);
+    //}
+
+    public int checkPickUp(Vector2 playerPos, ObjectPool<PowerUp> powerUpPool)
     {
-        IPowerUp newPowerUp = new PowerUp();
-
-        int randomInt = Random.Range(0, allPowerUps.Length);
-
-        newPowerUp = allPowerUps[randomInt].Decorate(newPowerUp);
-        PowerUpWithTransform powerUpFinished = new PowerUpWithTransform() { myPowerUp = newPowerUp, myTransform = powerUpObj, myVector2 = powerUpObj.position };
-        spawnedPowerUp.Add(powerUpFinished);
-    }
-
-    public void checkPickUp(Vector2 playerPos)
-    {
-        foreach (PowerUpWithTransform powerUp in spawnedPowerUp)
+        int points = 0;
+        foreach (PowerUp powerUp in powerUpPool._activeObjects)
         {
-            if(powerUp.myVector2 == playerPos)
+            if(Coordinate.ToVector2(powerUp.Position) == playerPos)
             {
-                powerUp.myPowerUp.PickUp();
-                spawnedPowerUp.Remove(powerUp);
+                points += powerUp.PickUp();
+                powerUpPool.DeactivateObject(powerUp);
                 break;
             }
         }
+
+        return points;
     }
 }
 
