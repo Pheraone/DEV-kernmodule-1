@@ -4,7 +4,7 @@ using UnityEngine;
 
     public class PowerUpWithTransform
 {
-    public AbPowerUp _myPowerUp;
-    public Transform _myTransform;
-    public Vector2 _myVector2;
+    public IPowerUp myPowerUp;
+    public Transform myTransform;
+    public Vector2 myVector2;
 }

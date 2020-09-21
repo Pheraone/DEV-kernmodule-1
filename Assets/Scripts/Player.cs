@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : IMoveable, ISpawnable
 {
-    public Vector3 _direction;
+    public Vector3 direction;
 
     public void SpawnTo(Coordinate spawnPoint)
     {
@@ -15,7 +15,7 @@ public class Player : IMoveable, ISpawnable
     {
         if (newDirection != null)
         {
-            Vector2 originalDirectionFuture = actor.transform.position + _direction;
+            Vector2 originalDirectionFuture = actor.transform.position + direction;
             Coordinate originalDirectionStep = new Coordinate((int)originalDirectionFuture.x, (int)originalDirectionFuture.y);
 
 
@@ -25,13 +25,13 @@ public class Player : IMoveable, ISpawnable
             if (possibleMoves.Contains(oneStepAhead))
             {
                 Debug.Log("Changing route");
-                _direction = newDirection;
-                actor.transform.position += _direction;
+                direction = newDirection;
+                actor.transform.position += direction;
             }
 
             else if (possibleMoves.Contains(originalDirectionStep))
             {
-                actor.transform.position += _direction;
+                actor.transform.position += direction;
             }
         }
     }

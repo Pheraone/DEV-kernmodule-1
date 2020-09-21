@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AbPowerUp
+public abstract class IPowerUp
 {
     public delegate void powerFunction();
-    public powerFunction _usePowerUp;
-    public int _points { get; set; }
+    public powerFunction usePowerUp;
+    public int points { get; set; }
     public abstract void PickUp();
 }

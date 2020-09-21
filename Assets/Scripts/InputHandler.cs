@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputHandler
 {
-    private List<KeyCommand> _keyCommands = new List<KeyCommand>();
+    private List<KeyCommand> keyCommands = new List<KeyCommand>();
 
     public void InputInit()
     {
@@ -16,7 +16,7 @@ public class InputHandler
 
     public ICommand HandleInput()
     {
-        foreach(KeyCommand keycommand in _keyCommands)
+        foreach(KeyCommand keycommand in keyCommands)
         {
             if (Input.GetKeyDown(keycommand.key))
             {
@@ -29,7 +29,7 @@ public class InputHandler
 
     public void BindInputToCommand(KeyCode keyCode, ICommand newCommand)
     {
-        _keyCommands.Add(new KeyCommand()
+        keyCommands.Add(new KeyCommand()
         {
             key = keyCode,
             command = newCommand
@@ -38,11 +38,11 @@ public class InputHandler
 
     public void UnBindInput(KeyCode keyCode)
     {
-        List<KeyCommand> commands = _keyCommands.FindAll(x => x.key == keyCode);
+        List<KeyCommand> commands = keyCommands.FindAll(x => x.key == keyCode);
 
         foreach(KeyCommand command in commands)
         {
-            _keyCommands.Remove(command);
+            keyCommands.Remove(command);
         }
     }
 
