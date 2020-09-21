@@ -9,11 +9,13 @@ public class GameManager : MonoBehaviour
 
     InputHandler _inputHandler;
     Player _player;
+    PowerUpManager powerUpManager;
     //ToDo: remove once obsolete
     TestPlayer _testPlayer;
     TestEnemy _testEnemy;
 
     public GameObject playerPrefab;
+    public GameObject PowerUpPrefab;
     public GameObject playerObject;
     Vector3 newDirection;
     // Start is called before the first frame update
@@ -26,6 +28,10 @@ public class GameManager : MonoBehaviour
         _powerUpPool = new ObjectPool<TestPowerUp>();
 
         _levelGeneration = new LevelGeneration(new TestPlayer(), _powerUpPool) as ILevelGenerator;
+
+        powerUpManager = new PowerUpManager();
+        powerUpManager.createRandomPowerUp(Instantiate(PowerUpPrefab).transform);
+
     }
 
     // Update is called once per frame
@@ -41,6 +47,8 @@ public class GameManager : MonoBehaviour
         if (PlayerAlarm.TickingTimer())
         {
             _player.MoveActor(playerObject, newDirection, _levelGeneration.Path);
+
+            powerUpManager.checkPickUp(playerObject.transform.position);
         }
     }
 
