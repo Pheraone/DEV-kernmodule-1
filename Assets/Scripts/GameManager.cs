@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         _levelGeneration = new LevelGeneration(new TestPlayer(), _powerUpPool) as ILevelGenerator;
 
         powerUpManager = new PowerUpManager();
-        powerUpManager.createRandomPowerUp(Instantiate(PowerUpPrefab).transform);
+        powerUpManager.CreateRandomPowerUp(Instantiate(PowerUpPrefab).transform);
 
     }
 
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         {
             _player.MoveActor(playerObject, newDirection, _levelGeneration.Path);
 
-            powerUpManager.checkPickUp(playerObject.transform.position);
+            powerUpManager.CheckPickUp(playerObject.transform.position);
         }
     }
 

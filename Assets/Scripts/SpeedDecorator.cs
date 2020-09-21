@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpeedDecorator : IPowerUpDecorator
 {
-    public void powerUpEffect()
+    public void PowerUpEffect()
     {
         Debug.Log("Haha speed go brr");
     }
@@ -13,7 +13,7 @@ public class SpeedDecorator : IPowerUpDecorator
     {
         powerUp._points += 100;
         powerUp._usePowerUp = null;
-        powerUp._usePowerUp += powerUpEffect;
+        powerUp._usePowerUp += PowerUpEffect;
         return powerUp;
     }
 }
