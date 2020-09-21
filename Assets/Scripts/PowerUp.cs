@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PowerUp : IPowerUp
 {
-    public new powerFunction usePowerUp;
     public override void PickUp()
     {
-        usePowerUp.Invoke();
+        Debug.Log(points);
+
+        usePowerUp?.Invoke();
     }
 }
