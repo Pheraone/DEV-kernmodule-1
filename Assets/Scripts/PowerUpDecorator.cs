@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface PowerUpDecorator
+public interface IPowerUpDecorator
 {
     void PowerUpEffect();
     AbPowerUp Decorate(AbPowerUp powerUp);

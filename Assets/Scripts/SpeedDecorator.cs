@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeedDecorator : PowerUpDecorator
+public class SpeedDecorator : IPowerUpDecorator
 {
     public void PowerUpEffect()
     {
