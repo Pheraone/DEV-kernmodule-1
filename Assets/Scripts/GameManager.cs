@@ -15,29 +15,25 @@ public class GameManager : MonoBehaviour
     InputHandler _inputHandler;
     Player _player;
 
-    PowerUpManager powerUpManager;
+    PowerUpManager _powerUpManager;
 
-
-    public GameObject playerPrefab;
-    //public GameObject PowerUpPrefab;
-    public GameObject playerObject;
+    public GameObject _playerPrefab;
+    public GameObject _playerObject;
     Vector3 newDirection;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerObject = Instantiate(playerPrefab);
+        _playerObject = Instantiate(_playerPrefab);
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
-        _player = new Player(playerObject);
+        _player = new Player(_playerObject);
         _powerUpPool = new ObjectPool<PowerUp>();
 
         _levelGeneration = new LevelGeneration(_player, _powerUpPool) as ILevelGenerator;
         _score = new PointCounter();
 
-        powerUpManager = new PowerUpManager();
-        //powerUpManager.createRandomPowerUp(Instantiate(PowerUpPrefab).transform);
-
+        _powerUpManager = new PowerUpManager();
     }
 
     // Update is called once per frame
@@ -47,14 +43,21 @@ public class GameManager : MonoBehaviour
         
         if (commandTemp != null)
         {
-            newDirection = commandTemp.Execute(playerObject);
+            newDirection = commandTemp.Execute(_playerObject);
         }
 
         if (PlayerAlarm.TickingTimer())
         {
-            _player.MoveActor(playerObject, newDirection, _levelGeneration.Path);
-
-            int points = powerUpManager.checkPickUp(playerObject.transform.position, _powerUpPool);
+            _player.MoveActor(_playerObject, newDirection, _levelGeneration.Path);
+            foreach (TestEnemy enemy in _levelGeneration.TestEnemies)
+            {
+                if (enemy.CheckCollision(_playerObject.transform.position))
+                {
+                    Die();
+                    break;
+                }
+            }
+            int points = _powerUpManager.checkPickUp(_playerObject.transform.position, _powerUpPool);
             _score.AddPoints(points, 300*_currentLevel);
         }
 
@@ -62,6 +65,14 @@ public class GameManager : MonoBehaviour
         {
             LevelCleared();
         }
+    }
+
+    public void Die()
+    {
+        _winScreen.gameObject.SetActive(true);
+        TextMesh endText = _winScreen.gameObject.GetComponentInChildren<TextMesh>();
+        endText.text = "Too bad";
+        Time.timeScale = 0;
     }
 
     public void LevelCleared()
@@ -72,9 +83,13 @@ public class GameManager : MonoBehaviour
         else
         {
             _winScreen.gameObject.SetActive(true);
+            TextMesh endText = _winScreen.gameObject.GetComponentInChildren<TextMesh>();
+            endText.text = "You did it!";
             Time.timeScale = 0;
         }
     }
+
+    //buttons
 
     public void Retry()
     {

@@ -701,8 +701,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _winScreen: {fileID: 2119066795}
   _currentLevel: 1
-  playerPrefab: {fileID: 7765846564607764383, guid: 7ecdf398bd75801418b2de46ab389ab9, type: 3}
-  playerObject: {fileID: 0}
+  _playerPrefab: {fileID: 7765846564607764383, guid: 7ecdf398bd75801418b2de46ab389ab9, type: 3}
+  _playerObject: {fileID: 7765846564607764383, guid: 7ecdf398bd75801418b2de46ab389ab9, type: 3}
 --- !u!4 &1313917949
 Transform:
   m_ObjectHideFlags: 0
