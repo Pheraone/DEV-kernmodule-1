@@ -27,25 +27,29 @@ public class GameManager : MonoBehaviour
         enemyObject = Instantiate(enemyPrefab);
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
-        _levelGeneration = new LevelGeneration(playerObject) as ILevelGenerator;
         _player = new Player();
+
         
         _enemyStateMachine = new EnemyFSM();
         _enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
         _enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
 
        // _pathfinder = new Pathfinder(_levelGeneration._path);
+
+
+        _levelGeneration = new LevelGeneration() as ILevelGenerator;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        ICommand commandTemp = _inputHandler.HandleInput();
-
-        if (commandTemp != null)
-        {
-            newDirection = commandTemp.Execute(playerObject);
-        }
+        //ICommand commandTemp = _inputHandler.HandleInput();
+        //
+        //if (commandTemp != null)
+        //{
+        //    newDirection = commandTemp.Execute(playerObject);
+        //}
 
         if (PlayerAlarm.TickingTimer())
         {
@@ -66,6 +70,11 @@ public class GameManager : MonoBehaviour
             _enemyStateMachine.SwitchState(EnemyStateType.Attack);
         }
         _enemyStateMachine.Update();
+    }
+
+    public void NextLevel()
+    {
+        _levelGeneration.GenerateLevel();
     }
 }
 
