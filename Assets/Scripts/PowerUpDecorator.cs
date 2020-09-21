@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PowerUpDecorator
+public interface PowerUpDecorator
 {
-    public abstract void powerUpEffect();
-    public abstract IPowerUp Decorate(IPowerUp powerUp);
+    void powerUpEffect();
+    IPowerUp Decorate(IPowerUp powerUp);
 }
