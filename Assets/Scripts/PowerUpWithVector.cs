@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-    public class PowerUpWithVector
+    public class PowerUpWithTransform
 {
     public IPowerUp myPowerUp;
-    public Vector2 myVector;
+    public Transform myTransform;
+    public Vector2 myVector2;
 }
