@@ -87,4 +87,10 @@ public struct Coordinate
         }
         return a;
     }
+
+    public static Vector2 ToVector2(Coordinate a)
+    {
+        Vector2 newVector2 = new Vector2(a._x, a._y);
+        return newVector2;
+    }
 }
