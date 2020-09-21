@@ -12,14 +12,29 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject playerObject;
     Vector3 newDirection;
+
+    private EnemyFSM _enemyStateMachine;
+    //public Pathfinder _pathfinder;
+
+    public GameObject enemyPrefab;
+    public GameObject enemyObject;
+
+
     // Start is called before the first frame update
     void Start()
     {
         playerObject = Instantiate(playerPrefab);
+        enemyObject = Instantiate(enemyPrefab);
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
         _levelGeneration = new LevelGeneration(playerObject) as ILevelGenerator;
         _player = new Player();
+        
+        _enemyStateMachine = new EnemyFSM();
+        _enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
+        _enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
+
+       // _pathfinder = new Pathfinder(_levelGeneration._path);
     }
 
     // Update is called once per frame
@@ -36,5 +51,21 @@ public class GameManager : MonoBehaviour
         {
             _player.movePlayer(playerObject, newDirection);
         }
+
+        //Temporary for FSM state switch test
+        if (Input.GetKey(KeyCode.Space) || Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) > 2 )
+        {
+            _enemyStateMachine.SwitchState(EnemyStateType.Idle);
+            //FIXME: game object to Vector2
+          //  _pathfinder.FindPath(Vector2.zero, playerObject.transform.position);
+            Debug.Log(playerObject.transform.position);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F) || Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) <= 2)
+        {
+            _enemyStateMachine.SwitchState(EnemyStateType.Attack);
+        }
+        _enemyStateMachine.Update();
     }
 }
+

@@ -17,7 +17,7 @@ public class MonoBehaviourForTest : MonoBehaviour
         //add states to the dictionary
         _enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
         _enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
-        
+
     }
 
    
