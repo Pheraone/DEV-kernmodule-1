@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReverseDecorator : IPowerUpDecorator
+public class ReverseDecorator : PowerUpDecorator
 {
     public void PowerUpEffect()
     {

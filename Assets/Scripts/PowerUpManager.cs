@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PowerUpManager
 {
-    public IPowerUpDecorator[] _allPowerUps = new IPowerUpDecorator[2] { new SpeedDecorator(), new ReverseDecorator() };
+    public PowerUpDecorator[] _allPowerUps = new PowerUpDecorator[2] { new SpeedDecorator(), new ReverseDecorator() };
     public List<PowerUpWithTransform> _spawnedPowerUp = new List<PowerUpWithTransform>();
     public void CreateRandomPowerUp(Transform powerUpObj)
     {
