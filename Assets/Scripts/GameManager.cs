@@ -9,9 +9,7 @@ public class GameManager : MonoBehaviour
 
     InputHandler _inputHandler;
     Player _player;
-    //ToDo: remove once obsolete
-    TestPlayer _testPlayer;
-    TestEnemy _testEnemy;
+
 
     public GameObject playerPrefab;
     public GameObject playerObject;
