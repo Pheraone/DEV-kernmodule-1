@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class LevelGeneration : ILevelGenerator
 {
+    public int _currentLevel = 0;
     public ISpawnable _player;
+    private List<ISpawnable> _enemyList;
+    private List<ISpawnable> _powerUpList;
     public Coordinate Size { get; set; }
     public ICell[,] Grid { get; private set; }
     Coordinate _thisCoordinate;
     public List<Coordinate> Path { get; set; }
     List<Coordinate> _thisLoop;
 
-    public LevelGeneration(GameObject player)
+    public LevelGeneration()
     {
-        _player = player as ISpawnable;
+        _enemyList = new List<ISpawnable>();
+        _powerUpList = new List<ISpawnable>();
+
+        Path = new List<Coordinate>();
+
         if (Size == new Coordinate(0, 0))
         {
-            Size = new Coordinate(31, 17);
+            Size = new Coordinate(32, 18);
         }
 
         Grid = new ICell[Size._x, Size._y];
+
         GenerateGrid();
         GenerateLevel();
     }
@@ -38,8 +46,59 @@ public class LevelGeneration : ILevelGenerator
 
     public void GenerateLevel()
     {
+        ClearPreviousLevel();
+        _currentLevel++;
         NewLevelSimple();
+        GeneratePlayer();
+        GenerateEnemies(_currentLevel);
+        GeneratePowerUp(_currentLevel * 2);
         PopulateLevel();
+    }
+
+    void ClearPreviousLevel()
+    {
+        foreach (Coordinate pathCoordinate in Path)
+        {
+            if (ContainsCoordinates(pathCoordinate))
+            {
+                Grid[pathCoordinate._x, pathCoordinate._y].Cost = 1;
+            }
+        }
+    }
+
+    void GeneratePlayer()
+    {
+        if (_player == null)
+        {
+            _player = new TestPlayer() as ISpawnable;
+        }
+    }
+
+    void GenerateEnemies(int enemyAmount)
+    {
+        int currentEnemies = _enemyList.Count;
+        for (int i = 0; i < enemyAmount; i++)
+        {
+            if (i > currentEnemies - 1)
+            {
+                _enemyList.Add(new TestEnemy() as ISpawnable);
+            }
+        }
+    }
+
+    void GeneratePowerUp(int powerUpAmount)
+    {
+        int currentPowerUps = _powerUpList.Count;
+        Debug.Log("to spawn" + powerUpAmount);
+        Debug.Log("already spawned" + currentPowerUps);
+
+        for (int i = 0; i < powerUpAmount; i++)
+        {
+            if (i >= currentPowerUps)
+            {
+                _powerUpList.Add(new TestPowerUp() as ISpawnable);
+            }
+        }
     }
 
     private void NewLevelSimple()
@@ -53,7 +112,7 @@ public class LevelGeneration : ILevelGenerator
         Coordinate nextDirection = new Coordinate(0, 0);
         Coordinate previousDirection = new Coordinate(0, 0);
 
-        int maxNumberOfLoops = 10;
+        int maxNumberOfLoops = 15;
         bool finishedLoop = false;
         int lengthSide1;
         int lengthSide2;
@@ -110,8 +169,6 @@ public class LevelGeneration : ILevelGenerator
                 {
                     if (Grid[_thisCoordinate._x, _thisCoordinate._y].Cost >= 1)
                     {
-                        //_grid[_thisCoordinate._x, _thisCoordinate._y].Cost = 0;
-                        //_path.Add(_thisCoordinate);
                         _thisLoop.Add(_thisCoordinate);
 
                         _thisCoordinate += nextDirection;
@@ -131,7 +188,6 @@ public class LevelGeneration : ILevelGenerator
                 if (finishedLoop) break;
 
                 nextDirection = Coordinate.TurnLeft(nextDirection);
-                //nextDirection = Direction.NotSoRandomDirection(previousDirection);
                 previousDirection = nextDirection * -1;
             }
 
@@ -308,7 +364,29 @@ public class LevelGeneration : ILevelGenerator
 
     private void PopulateLevel()
     {
+        Coordinate spawnPoint;
+
         _player.SpawnTo(_thisCoordinate);
+
+        foreach (ISpawnable enemy in _enemyList)
+        {
+            do
+            {
+                spawnPoint = Path[(int)Random.Range(0, Path.Count - 1)];
+            }
+            while (spawnPoint == _thisCoordinate);
+            enemy.SpawnTo(spawnPoint);
+        }
+
+        foreach (ISpawnable powerUp in _powerUpList)
+        {
+            do
+            {
+                spawnPoint = Path[(int)Random.Range(0, Path.Count - 1)];
+            }
+            while (spawnPoint == _thisCoordinate);
+            powerUp.SpawnTo(spawnPoint);
+        }
     }
 
     /// <summary>
@@ -332,7 +410,6 @@ public class LevelGeneration : ILevelGenerator
 
 public interface ILevelGenerator
 {
-    Coordinate Size { get; set; }
     List<Coordinate> Path { get; set; }
     ICell[,] Grid { get; }
     void GenerateLevel();
