@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
             _player.MoveActor(playerObject, newDirection, _levelGeneration.Path);
 
             int points = powerUpManager.checkPickUp(playerObject.transform.position, _powerUpPool);
-            _score.AddPoints(points);
+            _score.AddPoints(points, 300*_currentLevel);
         }
 
         if (_score._levelUp)

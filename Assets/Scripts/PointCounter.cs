@@ -7,10 +7,10 @@ public class PointCounter
     public bool _levelUp = false;
     private int _points;
 
-    public void AddPoints(int amount)
+    public void AddPoints(int amount, int toLevelup)
     {
         _points += amount;
-        if (_points >= 300)
+        if (_points >= toLevelup)
         {
             _levelUp = true;
         }
