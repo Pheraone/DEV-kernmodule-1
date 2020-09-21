@@ -6,9 +6,18 @@ public class Player : IMoveable, ISpawnable
 {
     public Vector3 direction;
 
+    GameObject _thisPlayer;
+    public Coordinate Position { get; set; }
+
+    public Player(GameObject player)
+    {
+        _thisPlayer = player;
+    }
+
     public void SpawnTo(Coordinate spawnPoint)
     {
-
+        Position = spawnPoint;
+        _thisPlayer.transform.position = new Vector3(spawnPoint._x, spawnPoint._y, -2);
     }
 
     public void MoveActor(GameObject actor, Vector3 newDirection, List<Coordinate> possibleMoves)

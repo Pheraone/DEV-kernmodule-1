@@ -6,8 +6,13 @@ using System;
 
 public class ObjectPool<T> where T: IPoolable
 {
-    private List<T> _activeObjects = new List<T>();
+    public List<T> _activeObjects { get; private set; }
     private List<T> _inActiveObjects = new List<T>();
+
+    public ObjectPool()
+    {
+        _activeObjects = new List<T>();
+    }
 
     public T RequestObject()
     {

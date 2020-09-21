@@ -11,7 +11,7 @@ public class ReverseDecorator : PowerUpDecorator
 
     public IPowerUp Decorate(IPowerUp powerUp)
     {
-        powerUp.points += 300;
+        powerUp.Points += 300;
         powerUp.usePowerUp = null;
         powerUp.usePowerUp += powerUpEffect;
         return powerUp;

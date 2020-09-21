@@ -11,7 +11,7 @@ public class SpeedDecorator : PowerUpDecorator
 
     public IPowerUp Decorate(IPowerUp powerUp)
     {
-        powerUp.points += 100;
+        powerUp.Points += 100;
         powerUp.usePowerUp = null;
         powerUp.usePowerUp += powerUpEffect;
         return powerUp;
