@@ -8,7 +8,7 @@ public static class PlayerAlarm
     public static bool TickingTimer()
     {
         timerInt += Time.deltaTime;
-        //Debug.Log(timerInt);
+
         if (timerInt >= 0.5f)
         {
             timerInt = 0;

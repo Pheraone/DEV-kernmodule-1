@@ -8,16 +8,21 @@ public class LevelGeneration : ILevelGenerator
     public ISpawnable _player;
     private List<ISpawnable> _enemyList;
     private List<ISpawnable> _powerUpList;
+    private ObjectPool<PowerUp> _powerUpPool;
+
     public Coordinate Size { get; set; }
     public ICell[,] Grid { get; private set; }
+
     Coordinate _thisCoordinate;
     public List<Coordinate> Path { get; set; }
     List<Coordinate> _thisLoop;
 
-    public LevelGeneration()
+    public LevelGeneration(ISpawnable player, ObjectPool<PowerUp> powerUpPool)
     {
+        _player = player;
         _enemyList = new List<ISpawnable>();
         _powerUpList = new List<ISpawnable>();
+        _powerUpPool = powerUpPool;
 
         Path = new List<Coordinate>();
 
@@ -44,33 +49,22 @@ public class LevelGeneration : ILevelGenerator
         }
     }
 
-    public void GenerateLevel()
+    public int GenerateLevel()
     {
         ClearPreviousLevel();
         _currentLevel++;
         NewLevelSimple();
-        GeneratePlayer();
         GenerateEnemies(_currentLevel);
-        GeneratePowerUp(_currentLevel * 2);
+        GeneratePowerUps(_currentLevel * 2);
         PopulateLevel();
+        return _currentLevel;
     }
 
     void ClearPreviousLevel()
     {
         foreach (Coordinate pathCoordinate in Path)
         {
-            if (ContainsCoordinates(pathCoordinate))
-            {
                 Grid[pathCoordinate._x, pathCoordinate._y].Cost = 1;
-            }
-        }
-    }
-
-    void GeneratePlayer()
-    {
-        if (_player == null)
-        {
-            _player = new TestPlayer() as ISpawnable;
         }
     }
 
@@ -86,18 +80,14 @@ public class LevelGeneration : ILevelGenerator
         }
     }
 
-    void GeneratePowerUp(int powerUpAmount)
+    void GeneratePowerUps(int powerUpAmount)
     {
-        int currentPowerUps = _powerUpList.Count;
-        Debug.Log("to spawn" + powerUpAmount);
-        Debug.Log("already spawned" + currentPowerUps);
+        _powerUpList.Clear();
+        _powerUpPool.DeactivateAll();
 
         for (int i = 0; i < powerUpAmount; i++)
         {
-            if (i >= currentPowerUps)
-            {
-                _powerUpList.Add(new TestPowerUp() as ISpawnable);
-            }
+            _powerUpList.Add(_powerUpPool.RequestObject() as ISpawnable);
         }
     }
 
@@ -213,6 +203,7 @@ public class LevelGeneration : ILevelGenerator
     }
 
 
+    //ToDo: remove
     private void NewLevel()
     {
         Path = new List<Coordinate>();
@@ -406,11 +397,4 @@ public class LevelGeneration : ILevelGenerator
         _thisLoop.Add(_thisCoordinate);
     }
 
-}
-
-public interface ILevelGenerator
-{
-    List<Coordinate> Path { get; set; }
-    ICell[,] Grid { get; }
-    void GenerateLevel();
 }

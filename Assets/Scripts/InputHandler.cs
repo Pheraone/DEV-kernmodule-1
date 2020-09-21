@@ -38,7 +38,12 @@ public class InputHandler
 
     public void UnBindInput(KeyCode keyCode)
     {
-        //???
+        List<KeyCommand> commands = keyCommands.FindAll(x => x.key == keyCode);
+
+        foreach(KeyCommand command in commands)
+        {
+            keyCommands.Remove(command);
+        }
     }
 
     public class KeyCommand

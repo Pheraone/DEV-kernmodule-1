@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeedDecorator : PowerUpDecorator
+public class ReverseDecorator : PowerUpDecorator
 {
     public void powerUpEffect()
     {
-        Debug.Log("Haha speed go brr");
+        Debug.Log("Haha controls go brr");
     }
 
     public IPowerUp Decorate(IPowerUp powerUp)
     {
-        powerUp.Points += 100;
+        powerUp.Points += 300;
         powerUp.usePowerUp = null;
         powerUp.usePowerUp += powerUpEffect;
         return powerUp;
