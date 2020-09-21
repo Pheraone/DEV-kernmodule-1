@@ -4,14 +4,14 @@ using UnityEngine;
 
 public static class PlayerAlarm
 {
-    private static float TIMER_INT;
+    private static float timerInt;
     public static bool TickingTimer()
     {
-        TIMER_INT += Time.deltaTime;
+        timerInt += Time.deltaTime;
 
-        if (TIMER_INT >= 0.5f)
+        if (timerInt >= 0.5f)
         {
-            TIMER_INT = 0;
+            timerInt = 0;
             return true;
         }
 

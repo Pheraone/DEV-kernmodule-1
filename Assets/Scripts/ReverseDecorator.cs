@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ReverseDecorator : IPowerUpDecorator
 {
-    public void PowerUpEffect()
+    public void powerUpEffect()
     {
         Debug.Log("Haha controls go brr");
     }
@@ -13,7 +13,7 @@ public class ReverseDecorator : IPowerUpDecorator
     {
         powerUp._points += 300;
         powerUp._usePowerUp = null;
-        powerUp._usePowerUp += PowerUpEffect;
+        powerUp._usePowerUp += powerUpEffect;
         return powerUp;
     }
 }
