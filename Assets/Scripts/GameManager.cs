@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    ILevelGenerator _levelGeneration;
+    private ILevelGenerator _levelGeneration;
+    private ObjectPool<TestPowerUp> _powerUpPool;
 
     InputHandler _inputHandler;
     Player _player;
@@ -22,19 +23,20 @@ public class GameManager : MonoBehaviour
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
         _player = new Player();
+        _powerUpPool = new ObjectPool<TestPowerUp>();
 
-        _levelGeneration = new LevelGeneration() as ILevelGenerator;
+        _levelGeneration = new LevelGeneration(new TestPlayer(), _powerUpPool) as ILevelGenerator;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //ICommand commandTemp = _inputHandler.HandleInput();
-        //
-        //if (commandTemp != null)
-        //{
-        //    newDirection = commandTemp.Execute(playerObject);
-        //}
+        ICommand commandTemp = _inputHandler.HandleInput();
+        
+        if (commandTemp != null)
+        {
+            newDirection = commandTemp.Execute(playerObject);
+        }
 
         if (PlayerAlarm.TickingTimer())
         {

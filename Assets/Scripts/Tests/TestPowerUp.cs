@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestPowerUp : ISpawnable
+public class TestPowerUp : ISpawnable, IPoolable
 {
     private GameObject _thisPowerUp;
     public Coordinate Position { get; set; }
+
+    public bool Active { get; set ; }
 
     public TestPowerUp()
     {
@@ -21,5 +23,15 @@ public class TestPowerUp : ISpawnable
         Position = spawnPoint;
         _thisPowerUp.transform.position = new Vector3(spawnPoint._x, spawnPoint._y, -1);
         _thisPowerUp.name = "PowerUp " + spawnPoint._x + ", " + spawnPoint._y;
+    }
+
+    public void OnEnabled()
+    {
+        _thisPowerUp.SetActive(false);
+    }
+
+    public void OnDisabled()
+    {
+        _thisPowerUp.SetActive(true);
     }
 }
