@@ -1,36 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Canvas _winScreen;
     private ILevelGenerator _levelGeneration;
-    private ObjectPool<TestPowerUp> _powerUpPool;
+    private ObjectPool<PowerUp> _powerUpPool;
+
+    private PointCounter _score;
+    public int _currentLevel = 1;
 
     InputHandler _inputHandler;
     Player _player;
+
     PowerUpManager powerUpManager;
-    //ToDo: remove once obsolete
-    TestPlayer _testPlayer;
-    TestEnemy _testEnemy;
+
 
     public GameObject playerPrefab;
-    public GameObject PowerUpPrefab;
+    //public GameObject PowerUpPrefab;
     public GameObject playerObject;
     Vector3 newDirection;
+
     // Start is called before the first frame update
     void Start()
     {
         playerObject = Instantiate(playerPrefab);
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
-        _player = new Player();
-        _powerUpPool = new ObjectPool<TestPowerUp>();
+        _player = new Player(playerObject);
+        _powerUpPool = new ObjectPool<PowerUp>();
 
-        _levelGeneration = new LevelGeneration(new TestPlayer(), _powerUpPool) as ILevelGenerator;
+        _levelGeneration = new LevelGeneration(_player, _powerUpPool) as ILevelGenerator;
+        _score = new PointCounter();
 
         powerUpManager = new PowerUpManager();
-        powerUpManager.createRandomPowerUp(Instantiate(PowerUpPrefab).transform);
+        //powerUpManager.createRandomPowerUp(Instantiate(PowerUpPrefab).transform);
 
     }
 
@@ -48,12 +54,36 @@ public class GameManager : MonoBehaviour
         {
             _player.MoveActor(playerObject, newDirection, _levelGeneration.Path);
 
-            powerUpManager.checkPickUp(playerObject.transform.position);
+            int points = powerUpManager.checkPickUp(playerObject.transform.position, _powerUpPool);
+            _score.AddPoints(points, 300*_currentLevel);
+        }
+
+        if (_score._levelUp)
+        {
+            LevelCleared();
         }
     }
 
-    public void NextLevel()
+    public void LevelCleared()
     {
-        _levelGeneration.GenerateLevel();
+        _score._levelUp = false;
+        _score.ResetPoints();
+        if (_currentLevel <= 2) _currentLevel = _levelGeneration.GenerateLevel();
+        else
+        {
+            _winScreen.gameObject.SetActive(true);
+            Time.timeScale = 0;
+        }
+    }
+
+    public void Retry()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

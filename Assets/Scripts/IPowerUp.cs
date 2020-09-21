@@ -6,6 +6,6 @@ public abstract class IPowerUp
 {
     public delegate void powerFunction();
     public powerFunction usePowerUp;
-    public int points { get; set; }
-    public abstract void PickUp();
+    public int Points { get; set; }
+    public abstract int PickUp();
 }

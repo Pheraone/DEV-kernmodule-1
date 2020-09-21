@@ -8,7 +8,7 @@ public class LevelGeneration : ILevelGenerator
     public ISpawnable _player;
     private List<ISpawnable> _enemyList;
     private List<ISpawnable> _powerUpList;
-    private ObjectPool<TestPowerUp> _powerUpPool;
+    private ObjectPool<PowerUp> _powerUpPool;
 
     public Coordinate Size { get; set; }
     public ICell[,] Grid { get; private set; }
@@ -17,7 +17,7 @@ public class LevelGeneration : ILevelGenerator
     public List<Coordinate> Path { get; set; }
     List<Coordinate> _thisLoop;
 
-    public LevelGeneration(ISpawnable player, ObjectPool<TestPowerUp> powerUpPool)
+    public LevelGeneration(ISpawnable player, ObjectPool<PowerUp> powerUpPool)
     {
         _player = player;
         _enemyList = new List<ISpawnable>();
@@ -49,7 +49,7 @@ public class LevelGeneration : ILevelGenerator
         }
     }
 
-    public void GenerateLevel()
+    public int GenerateLevel()
     {
         ClearPreviousLevel();
         _currentLevel++;
@@ -57,6 +57,7 @@ public class LevelGeneration : ILevelGenerator
         GenerateEnemies(_currentLevel);
         GeneratePowerUps(_currentLevel * 2);
         PopulateLevel();
+        return _currentLevel;
     }
 
     void ClearPreviousLevel()
