@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface PowerUpDecorator
 {
-    void powerUpEffect();
-    IPowerUp Decorate(IPowerUp powerUp);
+    void PowerUpEffect();
+    AbPowerUp Decorate(AbPowerUp powerUp);
 }

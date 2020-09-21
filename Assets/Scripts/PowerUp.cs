@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUp : IPowerUp
+public class PowerUp : AbPowerUp
 {
     public override void PickUp()
     {
-        Debug.Log(points);
+        Debug.Log(_points);
 
-        usePowerUp?.Invoke();
+        _usePowerUp?.Invoke();
     }
 }
