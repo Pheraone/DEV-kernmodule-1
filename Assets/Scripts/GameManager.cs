@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 
         if (PlayerAlarm.TickingTimer())
         {
-            _player.MoveActor(playerObject, newDirection, _levelGeneration._path);
+            _player.MoveActor(playerObject, newDirection, _levelGeneration.Path);
         }
     }
 

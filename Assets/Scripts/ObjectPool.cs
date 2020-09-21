@@ -33,7 +33,10 @@ public class ObjectPool<T> where T: IPoolable
         item.OnEnabled();
         item.Active = true;
 
-        if (_inActiveObjects.Contains(item)) _inActiveObjects.Remove(item);
+        if (_inActiveObjects.Contains(item))
+        {
+            _inActiveObjects.Remove(item);
+        }
 
         _activeObjects.Add(item);
         return item;
@@ -46,5 +49,17 @@ public class ObjectPool<T> where T: IPoolable
         item.OnDisabled();
         item.Active = false;
         _inActiveObjects.Add(item);
+    }
+
+    public void DeactivateAll()
+    {
+        foreach (T item in _activeObjects)
+        {
+            
+            item.Active = false;
+            item.OnDisabled();
+            _inActiveObjects.Add(item);
+        }
+        _activeObjects.Clear();
     }
 }

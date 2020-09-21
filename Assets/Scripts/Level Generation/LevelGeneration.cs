@@ -63,10 +63,7 @@ public class LevelGeneration : ILevelGenerator
     {
         foreach (Coordinate pathCoordinate in Path)
         {
-            if (ContainsCoordinates(pathCoordinate))
-            {
                 Grid[pathCoordinate._x, pathCoordinate._y].Cost = 1;
-            }
         }
     }
 
@@ -85,6 +82,8 @@ public class LevelGeneration : ILevelGenerator
     void GeneratePowerUps(int powerUpAmount)
     {
         _powerUpList.Clear();
+        _powerUpPool.DeactivateAll();
+
         for (int i = 0; i < powerUpAmount; i++)
         {
             _powerUpList.Add(_powerUpPool.RequestObject() as ISpawnable);

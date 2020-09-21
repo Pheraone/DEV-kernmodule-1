@@ -27,11 +27,11 @@ public class TestPowerUp : ISpawnable, IPoolable
 
     public void OnEnabled()
     {
-        _thisPowerUp.SetActive(false);
+        _thisPowerUp.SetActive(true);
     }
 
     public void OnDisabled()
     {
-        _thisPowerUp.SetActive(true);
+        _thisPowerUp.SetActive(false);
     }
 }
