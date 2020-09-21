@@ -17,16 +17,25 @@ public class GameManager : MonoBehaviour
 
     PowerUpManager powerUpManager;
 
-
     public GameObject playerPrefab;
     //public GameObject PowerUpPrefab;
     public GameObject playerObject;
     Vector3 newDirection;
 
+    private EnemyFSM _enemyStateMachine;
+    public Pathfinder2 _pathfinder;
+
+    public GameObject enemyPrefab;
+    public GameObject enemyObject;
+
+    public RandomCoordinate _randomCoordinate;
+
     // Start is called before the first frame update
     void Start()
     {
         playerObject = Instantiate(playerPrefab);
+        enemyObject = Instantiate(enemyPrefab);
+        
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
         _player = new Player(playerObject);
@@ -37,6 +46,18 @@ public class GameManager : MonoBehaviour
 
         powerUpManager = new PowerUpManager();
         //powerUpManager.createRandomPowerUp(Instantiate(PowerUpPrefab).transform);
+       
+        _enemyStateMachine = new EnemyFSM();
+        _enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
+        _enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
+
+       
+
+
+        _levelGeneration = new LevelGeneration() as ILevelGenerator;
+
+        _randomCoordinate = new RandomCoordinate(_levelGeneration);
+        _pathfinder = new Pathfinder2(_levelGeneration);
 
     }
 
@@ -74,6 +95,20 @@ public class GameManager : MonoBehaviour
             _winScreen.gameObject.SetActive(true);
             Time.timeScale = 0;
         }
+
+        //Temporary for FSM state switch test
+        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) > 0.5 )
+        {
+            _enemyStateMachine.SwitchState(EnemyStateType.Idle);
+
+            Debug.Log(playerObject.transform.position);
+        }
+
+        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) <= 0.5)
+        {
+            _enemyStateMachine.SwitchState(EnemyStateType.Attack);
+        }
+        _enemyStateMachine.Update();
     }
 
     public void Retry()
@@ -87,3 +122,4 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 }
+
