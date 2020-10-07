@@ -54,16 +54,20 @@ public class GameManager : MonoBehaviour
        
 
 
-        _levelGeneration = new LevelGeneration() as ILevelGenerator;
+        //_levelGeneration = new LevelGeneration() as ILevelGenerator;
 
         _randomCoordinate = new RandomCoordinate(_levelGeneration);
         _pathfinder = new Pathfinder2(_levelGeneration);
+        
+        //FIXME parameters must be of coordinate type. below/
+        //_pathfinder.FindPath(_randomCoordinate.GetRandomCoordinate(), _randomCoordinate.GetRandomCoordinate());
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        //_randomCoordinate.GetRandomCoordinate()
         ICommand commandTemp = _inputHandler.HandleInput();
         
         if (commandTemp != null)
@@ -83,6 +87,12 @@ public class GameManager : MonoBehaviour
         {
             LevelCleared();
         }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            _pathfinder.FindPath(_randomCoordinate.GetRandomCoordinate(), _randomCoordinate.GetRandomCoordinate());
+
+        }
     }
 
     public void LevelCleared()
@@ -95,7 +105,7 @@ public class GameManager : MonoBehaviour
             _winScreen.gameObject.SetActive(true);
             Time.timeScale = 0;
         }
-
+        //DISCUSS Why is this over here????
         //Temporary for FSM state switch test
         if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) > 0.5 )
         {

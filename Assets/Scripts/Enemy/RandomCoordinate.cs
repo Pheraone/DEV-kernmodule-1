@@ -14,9 +14,10 @@ public class RandomCoordinate
 
     public Coordinate GetRandomCoordinate()
     { 
+        //FIXME does not return coordinate at the moment.
         _path = _ILevelGenerator.Path;
         _randCor = _path[Random.Range(0, _path.Count - 1)];
-        Debug.Log("Random coordinaat is"+ _randCor);
+        Debug.Log("Random coordinaat is"+ _randCor._x + " " + _randCor._y );
         return _randCor;
     } 
 

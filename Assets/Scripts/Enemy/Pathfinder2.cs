@@ -45,7 +45,7 @@ public class Pathfinder2
         _openList = new List<PathNode>();
         _closedList = new List<PathNode>();
 
-        //for elke tile in de 
+        
         foreach(Coordinate pathCoordinate in _iLevelGenerator.Path)
         {
             _pathNode.coordinateNode = pathCoordinate;
@@ -64,9 +64,10 @@ public class Pathfinder2
             if (currentNode == _endNode)
             {
                 //reach final node
-                
                 return CalculatePath(_endNode);
             }
+
+            //currentNode had been checked so we move it to the list of calculated posibilities.
             _openList.Remove(currentNode);
             _closedList.Add(currentNode);
 
@@ -131,11 +132,11 @@ public class Pathfinder2
 
     private int CalculateDistanceCost(PathNode a, PathNode b)
     {
-        //int xDistance = Mathf.Abs(a.x - b.x);
-        //int yDistance = Mathf.Abs(a.y - b.y);
-        //int remaining = Mathf.Abs(xDistance - yDistance);
-        ////diagonale cost * mathf.min(xdis, ydis) + straightmovec * remaining
-        return _straightMoveCost;
+        int xDistance = Mathf.Abs(a.coordinateNode._x - b.coordinateNode._x);
+        int yDistance = Mathf.Abs(a.coordinateNode._y - b.coordinateNode._y);
+        int remaining = Mathf.Abs(xDistance - yDistance);
+
+        return _diagonalMoveCost * Mathf.Min(xDistance - yDistance ) + _straightMoveCost * remaining;
     }
 
     private PathNode GetLowestFCostNode(List<PathNode> pathNodeList)
