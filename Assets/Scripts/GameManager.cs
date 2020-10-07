@@ -19,12 +19,23 @@ public class GameManager : MonoBehaviour
 
     public GameObject _playerPrefab;
     public GameObject _playerObject;
+
     Vector3 newDirection;
+
+    private EnemyFSM _enemyStateMachine;
+    public Pathfinder2 _pathfinder;
+
+    public GameObject enemyPrefab;
+    public GameObject enemyObject;
+
+    public RandomCoordinate _randomCoordinate;
 
     // Start is called before the first frame update
     void Start()
     {
+
         _playerObject = Instantiate(_playerPrefab);
+
         _inputHandler = new InputHandler();
         _inputHandler.InputInit();
         _player = new Player(_playerObject);
@@ -34,6 +45,13 @@ public class GameManager : MonoBehaviour
         _score = new PointCounter();
 
         _powerUpManager = new PowerUpManager();
+
+        _enemyStateMachine = new EnemyFSM();
+        _enemyStateMachine.AddState(EnemyStateType.Idle, new IdleState());
+        _enemyStateMachine.AddState(EnemyStateType.Attack, new AttackState());
+
+        _randomCoordinate = new RandomCoordinate(_levelGeneration);
+        _pathfinder = new Pathfinder2(_levelGeneration);
     }
 
     // Update is called once per frame
@@ -87,6 +105,20 @@ public class GameManager : MonoBehaviour
             endText.text = "You did it!";
             Time.timeScale = 0;
         }
+
+        //Temporary for FSM state switch test
+        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) > 0.5 )
+        {
+            _enemyStateMachine.SwitchState(EnemyStateType.Idle);
+
+            Debug.Log(playerObject.transform.position);
+        }
+
+        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) <= 0.5)
+        {
+            _enemyStateMachine.SwitchState(EnemyStateType.Attack);
+        }
+        _enemyStateMachine.Update();
     }
 
     //buttons
@@ -102,3 +134,4 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 }
+

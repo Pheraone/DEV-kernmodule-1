@@ -24,6 +24,10 @@ public class Player : IMoveable, ISpawnable
     {
         if (newDirection != null)
         {
+            Vector2 originalDirectionFuture = actor.transform.position + direction;
+            Coordinate originalDirectionStep = new Coordinate((int)originalDirectionFuture.x, (int)originalDirectionFuture.y);
+
+
             Vector2 futureStep = actor.transform.position + newDirection;
             Coordinate oneStepAhead = new Coordinate((int)futureStep.x, (int)futureStep.y);
 
@@ -31,6 +35,11 @@ public class Player : IMoveable, ISpawnable
             {
                 Debug.Log("Changing route");
                 direction = newDirection;
+                actor.transform.position += direction;
+            }
+
+            else if (possibleMoves.Contains(originalDirectionStep))
+            {
                 actor.transform.position += direction;
             }
         }
