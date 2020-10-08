@@ -7,4 +7,5 @@ public interface ILevelGenerator
     List<Coordinate> Path { get; set; }
     ICell[,] Grid { get; }
     int GenerateLevel();
+    List<Enemy> EnemyList { get; }
 }
