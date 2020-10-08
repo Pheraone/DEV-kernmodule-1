@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Canvas _winScreen;
+    [SerializeField] private TMP_Text _screenText;
     private ILevelGenerator _levelGeneration;
     private ObjectPool<PowerUp> _powerUpPool;
 
@@ -25,15 +27,15 @@ public class GameManager : MonoBehaviour
     private EnemyFSM _enemyStateMachine;
     public Pathfinder2 _pathfinder;
 
-    public GameObject enemyPrefab;
-    public GameObject enemyObject;
+    public GameObject _enemyPrefab;
+    public GameObject _enemyObject;
 
     public RandomCoordinate _randomCoordinate;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _winScreen.gameObject.SetActive(false); 
         _playerObject = Instantiate(_playerPrefab);
 
         _inputHandler = new InputHandler();
@@ -67,7 +69,7 @@ public class GameManager : MonoBehaviour
         if (PlayerAlarm.TickingTimer())
         {
             _player.MoveActor(_playerObject, newDirection, _levelGeneration.Path);
-            foreach (TestEnemy enemy in _levelGeneration.TestEnemies)
+            foreach (Enemy enemy in _levelGeneration.EnemyList)
             {
                 if (enemy.CheckCollision(_playerObject.transform.position))
                 {
@@ -88,8 +90,8 @@ public class GameManager : MonoBehaviour
     public void Die()
     {
         _winScreen.gameObject.SetActive(true);
-        TextMesh endText = _winScreen.gameObject.GetComponentInChildren<TextMesh>();
-        endText.text = "Too bad";
+        TextMeshProUGUI endText = _winScreen.gameObject.GetComponentInChildren<TextMeshProUGUI>();
+        _screenText.text = "Too bad";
         Time.timeScale = 0;
     }
 
@@ -101,24 +103,24 @@ public class GameManager : MonoBehaviour
         else
         {
             _winScreen.gameObject.SetActive(true);
-            TextMesh endText = _winScreen.gameObject.GetComponentInChildren<TextMesh>();
-            endText.text = "You did it!";
+            TextMeshProUGUI endText = _winScreen.gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            _screenText.text = "You did it!";
             Time.timeScale = 0;
         }
 
         //Temporary for FSM state switch test
-        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) > 0.5 )
-        {
-            _enemyStateMachine.SwitchState(EnemyStateType.Idle);
-
-            Debug.Log(playerObject.transform.position);
-        }
-
-        if (Vector2.Distance(enemyObject.transform.position, playerObject.transform.position) <= 0.5)
-        {
-            _enemyStateMachine.SwitchState(EnemyStateType.Attack);
-        }
-        _enemyStateMachine.Update();
+        //if (Vector2.Distance(_enemyObject.transform.position, _playerObject.transform.position) > 0.5 )
+        //{
+        //    _enemyStateMachine.SwitchState(EnemyStateType.Idle);
+        //
+        //    Debug.Log(_playerObject.transform.position);
+        //}
+        //
+        //if (Vector2.Distance(_enemyObject.transform.position, _playerObject.transform.position) <= 0.5)
+        //{
+        //    _enemyStateMachine.SwitchState(EnemyStateType.Attack);
+        //}
+        //_enemyStateMachine.Update();
     }
 
     //buttons

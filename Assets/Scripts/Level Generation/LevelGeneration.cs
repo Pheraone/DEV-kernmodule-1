@@ -6,8 +6,8 @@ public class LevelGeneration : ILevelGenerator
 {
     public int _currentLevel = 0;
     private ISpawnable _player;
-    private List<ISpawnable> _enemyList;
-    public List<TestEnemy> TestEnemies { get; private set; }
+    public List<Enemy> EnemyList { get; private set; }
+    //public List<TestEnemy> TestEnemies { get; private set; }
     private List<ISpawnable> _powerUpList;
     private ObjectPool<PowerUp> _powerUpPool;
 
@@ -22,8 +22,8 @@ public class LevelGeneration : ILevelGenerator
     public LevelGeneration(ISpawnable player, ObjectPool<PowerUp> powerUpPool)
     {
         _player = player;
-        _enemyList = new List<ISpawnable>();
-        TestEnemies = new List<TestEnemy>();
+        EnemyList = new List<Enemy>();
+        //TestEnemies = new List<TestEnemy>();
         _powerUpList = new List<ISpawnable>();
         _powerUpPool = powerUpPool;
 
@@ -73,14 +73,14 @@ public class LevelGeneration : ILevelGenerator
 
     void GenerateEnemies(int enemyAmount)
     {
-        int currentEnemies = _enemyList.Count;
+        int currentEnemies = EnemyList.Count;
         for (int i = 0; i < enemyAmount; i++)
         {
             if (i > currentEnemies - 1)
             {
-                TestEnemy tempEnemy = new TestEnemy();
-                _enemyList.Add(tempEnemy as ISpawnable);
-                TestEnemies.Add(tempEnemy);
+                Enemy enemy = new Enemy();
+                EnemyList.Add(enemy);
+                //TestEnemies.Add(enemy);
             }
         }
     }
@@ -213,7 +213,7 @@ public class LevelGeneration : ILevelGenerator
 
         _player.SpawnTo(_thisCoordinate);
 
-        foreach (ISpawnable enemy in _enemyList)
+        foreach (ISpawnable enemy in EnemyList)
         {
             do
             {
