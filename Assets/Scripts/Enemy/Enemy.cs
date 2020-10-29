@@ -22,5 +22,13 @@ public class Enemy : ISpawnable
             Position = spawnPoint;
             _thisEnemy.transform.position = new Vector3(spawnPoint._x, spawnPoint._y, -1);
         }
-    
+
+    public bool CheckCollision(Vector3 playerPos)
+    {
+        if (Position._x == playerPos.x && Position._y == playerPos.y)
+        {
+            return true;
+        }
+        return false;
+    }
 }
